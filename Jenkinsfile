@@ -35,12 +35,7 @@ pipeline {
         }
 
         stage('Build and Push Image') {
-            agent {
-                docker { 
-                    image 'google/cloud-sdk:stable'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock --user root'
-                }
-            }
+            agent any
             steps {
                 sh """
                 docker build -t ${env.IMAGE_TAG} .
@@ -50,11 +45,11 @@ pipeline {
         }
 
         stage('Deploy to Cloud Run') {
-            agent {
+            agent { 
                 docker { 
                     image 'google/cloud-sdk:stable'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock --user root'
-                }
+                    args '--user root'
+                } 
             }
             steps {
                 sh """
